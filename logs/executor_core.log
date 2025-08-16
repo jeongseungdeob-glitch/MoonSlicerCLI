@@ -1,0 +1,6 @@
+2025-08-16 04:29:32,223 [INFO] executor_core: Logger initialized at 2025-08-16T04:29:32.223779
+2025-08-16 04:29:32,224 [INFO] executor_core: Executing provided Lua code (46 chars)
+2025-08-16 04:29:32,231 [INFO] executor_core: Execution result: {'ok': False, 'error': ''}
+2025-08-16 04:30:08,744 [INFO] executor_core: Logger initialized at 2025-08-16T04:30:08.744605
+2025-08-16 04:30:08,744 [INFO] executor_core: Executing provided Lua code (46 chars)
+2025-08-16 04:30:08,752 [INFO] executor_core: Execution result: {'ok': True, 'result': 'None'}

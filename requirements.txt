@@ -1,0 +1,10 @@
+PyQt6
+lupa
+pyyaml
+requests
+plyer
+fastapi
+uvicorn
+httpx
+pycryptodome
+python-multipart

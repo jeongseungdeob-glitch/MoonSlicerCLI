@@ -1,0 +1,5 @@
+2025-08-16 04:29:32,224 [INFO] sandbox: Logger initialized at 2025-08-16T04:29:32.224079
+2025-08-16 04:29:32,231 [ERROR] sandbox: Lua worker failed: 
+2025-08-16 04:30:08,744 [INFO] sandbox: Logger initialized at 2025-08-16T04:30:08.744840
+2025-08-16 04:30:08,751 [INFO] sandbox: [LUA] Hello from Lua
+2025-08-16 04:30:08,751 [INFO] sandbox: [LUA] x= 4

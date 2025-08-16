@@ -22,5 +22,31 @@
 - Decrypt/export via sidebar or CLI
 - No cloud, no telemetry, all local
 
+## Local Lua Sandbox Executor
+- Safe, self-hosted Lua execution with strict sandboxing (no IO/OS access)
+- AI-assisted script generation via existing `/backend` `/api/chat`
+- Validation to block unsafe tokens and infinite loops
+- Hard timeout using a separate process
+
+### Run GUI
+```bash
+python gui.py
+```
+
+### Run CLI
+```bash
+# Generate script via AI and save to /sandboxed_scripts
+python main.py generate "print a table of prime numbers up to 100 in Lua"
+
+# List saved scripts
+python main.py list
+
+# Execute a script file
+python main.py execute --file /workspace/sandboxed_scripts/script_YYYYMMDD-HHMMSS.lua
+
+# Execute inline code
+python main.py execute --code "print('Hello from Lua')"
+```
+
 ## License
 MIT (see LICENSE)
