@@ -1,5 +1,6 @@
 fastapi
 httpx
-uvicorn
 lupa
 pyyaml
+PyQt6
+plyer

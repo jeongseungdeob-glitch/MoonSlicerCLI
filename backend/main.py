@@ -5,6 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from crypto_utils import encrypt_file, decrypt_file
 import httpx
 import tempfile
+from ai_module.ai_interface import AIInterface
+from ai_module.script_builder import build_script
+from ai_module.validation import validate, ValidationError
+from executor.core import Executor
 
 app = FastAPI()
 app.add_middleware(
@@ -21,6 +25,9 @@ MODEL_MAP = {
     "starcoder2": "starcoder2:7b-q4_0"
 }
 OLLAMA_API = "http://localhost:11434/api/generate"
+
+ai_engine = AIInterface()
+exec_engine = Executor()
 
 def route_prompt(prompt):
     p = prompt.lower()
@@ -79,3 +86,28 @@ async def export_endpoint(req: Request):
     enc_path = chat_path + ".enc"
     encrypt_file(chat_path, enc_path)
     return FileResponse(enc_path, filename="moonslicer_chat_history.json.enc")
+
+@app.post("/api/generate_lua")
+async def generate_and_execute(req: Request):
+    data = await req.json()
+    prompt: str = data.get("prompt", "Generate a Roblox Lua script\n")
+    execute: bool = data.get("execute", False)
+
+    # Step 1: Ask AI for script
+    lua_raw = await ai_engine.generate_script(prompt)
+    lua_code = build_script(lua_raw)
+
+    try:
+        validate(lua_code)
+    except ValidationError as ve:
+        return JSONResponse(content={"error": str(ve)}, status_code=400)
+
+    # Optionally execute
+    result = None
+    if execute:
+        try:
+            result = exec_engine.run_code(lua_code)
+        except Exception as e:
+            return JSONResponse(content={"error": str(e), "script": lua_code}, status_code=500)
+
+    return {"script": lua_code, "result": result}
