@@ -84,24 +84,89 @@ cia-roblox-executor/
 
 ### Prerequisites
 
+- **Windows 10/11, Linux, or macOS**
+- **Git**
+- **Internet connection** (for downloading dependencies)
+
+### Automated Installation (Recommended)
+
+#### Windows Users
+
+1. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd cia-roblox-executor
+   ```
+
+2. **Run the Installer**
+   ```bash
+   # Double-click the installer or run from command prompt
+   "Exec dependencies installer.bat"
+   ```
+
+   The installer will automatically:
+   - Install Python 3.11+ (if not present)
+   - Install all Python dependencies
+   - Download and install Ollama
+   - Download AI models (Mistral, DeepSeek, StarCoder2)
+   - Create project structure
+   - Configure the environment
+
+#### Linux/macOS Users
+
+1. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd cia-roblox-executor
+   ```
+
+2. **Run the Installer**
+   ```bash
+   # Make script executable (first time only)
+   chmod +x install_dependencies.sh
+   
+   # Run the installer
+   ./install_dependencies.sh
+   ```
+
+   The installer will automatically:
+   - Install system dependencies
+   - Set up Python virtual environment
+   - Install all Python packages
+   - Download and install Ollama
+   - Download AI models
+   - Create project structure
+   - Generate activation script
+
+3. **Activate Environment** (Linux/macOS only)
+   ```bash
+   source activate.sh
+   ```
+
+### Manual Installation (Advanced Users)
+
+If you prefer manual installation:
+
+#### Prerequisites
+
 - **Python 3.11+**
 - **Ollama** (for AI models)
 - **Git**
 
-### Step 1: Clone the Repository
+#### Step 1: Clone the Repository
 
 ```bash
 git clone <repository-url>
 cd cia-roblox-executor
 ```
 
-### Step 2: Install Python Dependencies
+#### Step 2: Install Python Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 3: Set Up AI Models
+#### Step 3: Set Up AI Models
 
 Install and configure Ollama with the required models:
 
@@ -118,7 +183,7 @@ ollama pull starcoder2:7b-q4_0
 ollama serve
 ```
 
-### Step 4: Configuration
+#### Step 4: Configuration
 
 The application will create a default configuration file (`config.yaml`) on first run. You can customize settings for:
 
