@@ -1,0 +1,32 @@
+# Core dependencies
+fastapi
+uvicorn
+httpx
+pycryptodome
+python-multipart
+
+# GUI and desktop interface
+PyQt6
+plyer
+
+# Lua sandbox and execution
+lupa
+
+# Configuration and utilities
+pyyaml
+python-dotenv
+
+# AI and machine learning
+openai
+anthropic
+transformers
+torch
+
+# Security and monitoring
+psutil
+watchdog
+
+# Development and testing
+pytest
+black
+flake8
