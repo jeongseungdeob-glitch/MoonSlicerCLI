@@ -31,16 +31,23 @@ echo.
 echo [STEP 1/6] Checking system requirements...
 echo.
 
-:: Check Windows version (robust method)
+:: Check Windows version (debug method)
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set VERSION=%%i.%%j
 echo [INFO] Detected Windows version: %VERSION%
 
-:: More flexible version check - accept Windows 8.1+ for compatibility
-if %VERSION% GEQ 6.3 (
-    echo [✓] Windows version %VERSION% detected (compatible)
+:: Debug: Show the comparison
+echo [DEBUG] Comparing %VERSION% with 6.3
+
+:: More explicit version check
+if "%VERSION%"=="10.0" (
+    echo [OK] Windows 10 detected (compatible)
+) else if "%VERSION%"=="11.0" (
+    echo [OK] Windows 11 detected (compatible)
+) else if "%VERSION%"=="6.3" (
+    echo [OK] Windows 8.1 detected (compatible)
 ) else (
-    echo [✗] Windows 8.1 or higher required (detected version %VERSION%)
-    echo Please upgrade to Windows 8.1, 10, or 11
+    echo [ERROR] Windows 8.1, 10, or 11 required (detected version %VERSION%)
+    echo Please upgrade to a compatible Windows version
     pause
     exit /b 1
 )
