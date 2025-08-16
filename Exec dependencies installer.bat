@@ -2,6 +2,12 @@
 title CIA Roblox Executor - Dependencies Installer
 color 0A
 
+:: Enable error handling
+setlocal enabledelayedexpansion
+
+:: Set error level to continue on errors
+set EXIT_CODE=0
+
 echo.
 echo ========================================
 echo   CIA Roblox Executor v1.0
@@ -16,20 +22,25 @@ if %errorLevel% == 0 (
 ) else (
     echo [WARNING] Not running as administrator. Some installations may fail.
     echo Please run this script as administrator for best results.
-    pause
+    echo.
+    echo Press any key to continue anyway, or close this window to run as administrator...
+    pause >nul
 )
 
 echo.
 echo [STEP 1/6] Checking system requirements...
 echo.
 
-:: Check Windows version
-ver | findstr /i "10\.0\|11\.0" >nul
-if %errorLevel% == 0 (
-    echo [✓] Windows 10/11 detected
+:: Check Windows version (robust method)
+for /f "tokens=4-5 delims=. " %%i in ('ver') do set VERSION=%%i.%%j
+echo [INFO] Detected Windows version: %VERSION%
+
+:: More flexible version check - accept Windows 8.1+ for compatibility
+if %VERSION% GEQ 6.3 (
+    echo [✓] Windows version %VERSION% detected (compatible)
 ) else (
-    echo [✗] Windows 10/11 required
-    echo Please upgrade to Windows 10 or 11
+    echo [✗] Windows 8.1 or higher required (detected version %VERSION%)
+    echo Please upgrade to Windows 8.1, 10, or 11
     pause
     exit /b 1
 )
@@ -42,27 +53,35 @@ if %errorLevel% == 0 (
 ) else (
     echo [✗] Python not found. Installing Python 3.11...
     
-    :: Download Python installer
-    echo Downloading Python 3.11...
-    powershell -Command "& {Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.11.8/python-3.11.8-amd64.exe' -OutFile 'python_installer.exe'}"
-    
-    if exist python_installer.exe (
-        echo Installing Python...
-        python_installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
-        del python_installer.exe
-        
-        :: Refresh environment variables
-        call refreshenv.cmd 2>nul || (
-            echo Refreshing environment variables...
-            set PATH=%PATH%;C:\Python311;C:\Python311\Scripts
-        )
-        
-        echo [✓] Python installed successfully
+    :: Try multiple Python detection methods
+    python3 --version >nul 2>&1
+    if %errorLevel% == 0 (
+        echo [✓] Python3 found, creating python alias...
+        set PATH=%PATH%;C:\Python311;C:\Python311\Scripts
     ) else (
-        echo [✗] Failed to download Python
-        echo Please install Python 3.11+ manually from https://python.org
-        pause
-        exit /b 1
+        :: Download Python installer
+        echo Downloading Python 3.11...
+        powershell -Command "& {Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.11.8/python-3.11.8-amd64.exe' -OutFile 'python_installer.exe'}"
+        
+        if exist python_installer.exe (
+            echo Installing Python...
+            python_installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
+            del python_installer.exe
+            
+            :: Refresh environment variables
+            call refreshenv.cmd 2>nul || (
+                echo Refreshing environment variables...
+                set PATH=%PATH%;C:\Python311;C:\Python311\Scripts
+            )
+            
+            echo [✓] Python installed successfully
+        ) else (
+            echo [✗] Failed to download Python
+            echo Please install Python 3.11+ manually from https://python.org
+            echo Or ensure you have internet connection and try again.
+            pause
+            exit /b 1
+        )
     )
 )
 
@@ -74,9 +93,26 @@ echo.
 echo Upgrading pip...
 python -m pip install --upgrade pip
 
+:: Try alternative Python commands if needed
+if %errorLevel% neq 0 (
+    echo [WARNING] Standard python command failed, trying alternatives...
+    python3 -m pip install --upgrade pip
+    if %errorLevel% neq 0 (
+        echo [ERROR] Failed to upgrade pip. Please check Python installation.
+        pause
+        exit /b 1
+    )
+)
+
 :: Install Python packages
 echo Installing Python packages...
 pip install -r requirements.txt
+
+:: Try alternative if pip fails
+if %errorLevel% neq 0 (
+    echo [WARNING] Standard pip failed, trying python3 -m pip...
+    python3 -m pip install -r requirements.txt
+)
 
 if %errorLevel% == 0 (
     echo [✓] Python dependencies installed successfully
@@ -204,4 +240,5 @@ echo 2. Run: python main.py --help (for CLI mode)
 echo.
 echo For support, check the README.md file
 echo.
-pause
+echo Press any key to exit...
+pause >nul
