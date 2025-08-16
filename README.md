@@ -22,5 +22,11 @@
 - Decrypt/export via sidebar or CLI
 - No cloud, no telemetry, all local
 
+## CIA Roblox Executor Integration
+
+This project now includes an internal **Roblox Level-9 Lua executor** with a fully sandboxed runtime and AI-powered script generation.
+
+See `/executor` and `/ai_module` for implementation details.
+
 ## License
 MIT (see LICENSE)
